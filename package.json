@@ -1,0 +1,27 @@
+{
+  "name": "wedwizz-mobile",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "customer": "npm run start --workspace @wedwizz/customer",
+    "customer:android": "npm exec --workspace @wedwizz/customer -- expo run:android",
+    "customer:prebuild": "npm exec --workspace @wedwizz/customer -- expo prebuild --platform android --clean",
+    "vendor": "npm run start --workspace @wedwizz/vendor",
+    "vendor:android": "npm exec --workspace @wedwizz/vendor -- expo run:android",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
+  },
+  "devDependencies": {
+    "vitest": "^5.0.4"
+  },
+  "version": "1.0.0",
+  "dependencies": {
+    "expo": "~58.0.26",
+    "react": "19.3.0",
+    "react-native": "0.88.1"
+  }
+}
