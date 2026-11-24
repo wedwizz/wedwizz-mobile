@@ -1,6 +1,3 @@
-import { ScreenPlaceholder } from "@wedwizz/ui";
+import { LoginScreen } from "@/features/user/screens/auth/login-screen";
 
-// Target of useRequireLogin (a guest's gated tap) with the page to return to in the `from` param.
-export default function Login() {
-  return <ScreenPlaceholder title="Log in" note="Flow 1, from ../frontend/src/features/user/pages/auth/login-page.tsx" />;
-}
+export default LoginScreen;

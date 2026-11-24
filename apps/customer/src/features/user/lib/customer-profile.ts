@@ -102,8 +102,9 @@ export function serverFieldErrors(details: Record<string, unknown> | undefined):
   return errors;
 }
 
-// Readable before setup: profile setup links to the privacy policy and terms.
-const BEFORE_SETUP_PATHS = ["/user/profile-setup", "/user/profile/privacy", "/user/profile/terms"];
+// Readable before setup: the intro slides shown to a new account before setup (app only), and the privacy policy and
+// terms that profile setup links to.
+const BEFORE_SETUP_PATHS = ["/user/profile-setup", "/user/onboarding", "/user/profile/privacy", "/user/profile/terms"];
 
 /**
  * Where a signed-in customer must go instead of `pathname`, or null to stay: setup until the profile is

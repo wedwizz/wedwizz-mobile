@@ -166,3 +166,52 @@ describe("toResultsView", () => {
     expect(toResultsView({ ...base, data: { pages: [{ items: [] }] } })).toEqual({ state: "empty" });
   });
 });
+
+describe("venueSearchQuery near the customer", () => {
+  const near = { point: { latitude: 9.93123, longitude: 76.26789 }, radiusKm: 25 as const };
+
+  it("asks for nearby venues first, then the rest, when the sort is Recommended", () => {
+    expect(venueSearchQuery({ q: "", location: ALL_KERALA, filters: DEFAULT_VENUE_FILTERS, sort: "recommended", near })).toEqual({
+      category: "VENUE",
+      lat: 9.931,
+      lng: 76.268,
+      radiusKm: 25,
+      sort: "nearby-first",
+    });
+  });
+
+  it("keeps a price sort, without the point", () => {
+    expect(venueSearchQuery({ q: "", location: ALL_KERALA, filters: DEFAULT_VENUE_FILTERS, sort: "price-low", near })).toEqual({
+      category: "VENUE",
+      sort: "price-low",
+    });
+  });
+
+  it("is unchanged without Near me", () => {
+    expect(venueSearchQuery({ q: "", location: ALL_KERALA, filters: DEFAULT_VENUE_FILTERS, sort: "recommended", near: null })).toEqual({
+      category: "VENUE",
+      sort: "recommended",
+    });
+  });
+});
+
+describe("vendorSearchQuery near the customer", () => {
+  const near = { point: { latitude: 9.93123, longitude: 76.26789 }, radiusKm: 10 as const };
+
+  it("asks for vendors within the radius first, then the rest, when the sort is Recommended", () => {
+    expect(vendorSearchQuery({ category: "all", q: "", location: ALL_KERALA, price: "any", sort: "recommended", near })).toEqual({
+      kind: "SERVICE_BASED",
+      lat: 9.931,
+      lng: 76.268,
+      radiusKm: 10,
+      sort: "nearby-first",
+    });
+  });
+
+  it("keeps a price sort within the radius", () => {
+    expect(vendorSearchQuery({ category: "all", q: "", location: ALL_KERALA, price: "any", sort: "price-low", near })).toMatchObject({
+      radiusKm: 10,
+      sort: "price-low",
+    });
+  });
+});

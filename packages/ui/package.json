@@ -5,11 +5,22 @@
   "main": "src/index.ts",
   "types": "src/index.ts",
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@wedwizz/core": "*"
   },
   "peerDependencies": {
+    "@expo-google-fonts/fraunces": "*",
+    "@expo-google-fonts/inter": "*",
+    "@expo-google-fonts/plus-jakarta-sans": "*",
+    "expo-font": "*",
+    "expo-image": "*",
+    "lucide-react-native": "*",
     "react": "*",
     "react-native": "*",
-    "react-native-safe-area-context": "*"
+    "react-native-safe-area-context": "*",
+    "react-native-svg": "*"
   }
 }

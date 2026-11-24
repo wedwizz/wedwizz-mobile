@@ -6,7 +6,7 @@ React Native (Expo) apps for the WedWizz wedding marketplace. Full plan: [docs/M
 - `apps/customer` — customer app (signs in as role `USER`). Built first.
 - `apps/vendor` — vendor app (signs in as role `VENDOR`).
 - `packages/core` (`@wedwizz/core`) — logic shared by both apps: API client, auth, chat, geo, share, query keys, API types. Imported by path (`@wedwizz/core/api/api-client`). React Native adapters live in `native/` (secure-store session, kv-store/memory storage, expo-location) and `chat/app-chat-updates.ts`; the rest stays plain TS so it runs in Vitest.
-- `packages/ui` (`@wedwizz/ui`) — design tokens and shared components.
+- `packages/ui` (`@wedwizz/ui`) — design tokens (`tokens.ts`), fonts (`useAppFonts`) and shared components, styled with StyleSheet + tokens (no NativeWind). New looks go here. Preview them on `src/app/dev/ui-preview.tsx` (dev builds).
 - `design/customer`, `design/vendor` — design screenshots (reference only, never imported).
 - Admin stays on the web (`../frontend`). The backend is `../backend`.
 

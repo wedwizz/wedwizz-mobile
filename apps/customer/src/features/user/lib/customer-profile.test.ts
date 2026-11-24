@@ -36,6 +36,7 @@ describe("profileRedirect", () => {
 
   it("lets a customer read the privacy policy and terms before setup", () => {
     expect(profileRedirect("/user/profile/privacy", false)).toBeNull();
+    expect(profileRedirect("/user/onboarding", false)).toBeNull();
     expect(profileRedirect("/user/profile/terms", false)).toBeNull();
     expect(profileRedirect("/user/profile/notifications", false)).toBe("/user/profile-setup");
   });

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueries, useQuery } from "@tanstack/react-query";
 import { checkAvailability, getCatalogProfile, listProfileReviews, recordProfileView, searchCatalog } from "@/features/user/api/catalog.api";
 import { fetchBySlugs } from "@/features/user/lib/slug-batches";
 import type { CatalogQuery } from "@wedwizz/core/api/types";
@@ -30,6 +30,17 @@ export function useCatalogList(query: CatalogQuery, options: { enabled?: boolean
     queryFn: ({ signal }) => searchCatalog(query, { signal }),
     staleTime: STALE_MS,
     enabled: options.enabled ?? true,
+  });
+}
+
+/** Several one-page lists at once (Home's "From" prices), cached as useCatalogList caches them. */
+export function useCatalogLists(queries: CatalogQuery[]) {
+  return useQueries({
+    queries: queries.map((query) => ({
+      queryKey: catalogKeys.search({ ...query, single: true }),
+      queryFn: ({ signal }: { signal: AbortSignal }) => searchCatalog(query, { signal }),
+      staleTime: STALE_MS,
+    })),
   });
 }
 

@@ -27,13 +27,14 @@ describe("nearby search request", () => {
     expect(nearQuery(null)).toEqual({});
   });
 
+  // Mobile (2026-11-25): "nearby-first" where the web sorts by "distance" (farther vendors follow instead of being left out).
   it("sorts nearest first near the customer, keeps a chosen price sort, and filters by a chosen city", () => {
     const base = { category: "all", q: "", location: ALL_KERALA, price: "any" as const };
-    expect(vendorSearchQuery({ ...base, sort: "recommended", near: { point, radiusKm: 25 } })).toMatchObject({ sort: "distance", lat: 9.931, radiusKm: 25 });
+    expect(vendorSearchQuery({ ...base, sort: "recommended", near: { point, radiusKm: 25 } })).toMatchObject({ sort: "nearby-first", lat: 9.931, radiusKm: 25 });
     expect(vendorSearchQuery({ ...base, sort: "price-low", near: { point, radiusKm: 25 } })).toMatchObject({ sort: "price-low" });
     expect(vendorSearchQuery({ ...base, location: "Kochi", sort: "recommended", near: { point, radiusKm: 25 } })).toMatchObject({
       city: "Kochi",
-      sort: "distance",
+      sort: "nearby-first",
     });
     expect(vendorSearchQuery({ ...base, sort: "recommended" })).not.toHaveProperty("lat");
   });

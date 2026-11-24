@@ -20,7 +20,9 @@ export function nearMeFallback(status: NearMeStatus): { showCityPicker: boolean;
     case "denied":
       return {
         showCityPicker: true,
-        note: "Location is off for WedPlan. To turn it on, tap the lock icon next to the address, then Location → Allow. On a phone, also check that Location is on in Settings. Or pick your city:",
+        // Mobile: the web's steps are for a browser (the lock icon next to the address). The sheet adds an
+        // "Open settings" button.
+        note: "Location is off for WedWizz. To turn it on, open Settings → Permissions → Location → Allow, and check that Location is on for the phone. Or pick your city:",
       };
     case "unavailable":
       return { showCityPicker: true, note: "We couldn't find your location on this device. Pick your city instead:" };

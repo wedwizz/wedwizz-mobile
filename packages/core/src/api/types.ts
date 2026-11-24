@@ -540,7 +540,8 @@ export type ProofUploadRequest =
 // ---- Public catalogue (`/catalog`, no sign-in) ----
 
 /** "distance" needs lat/lng (nearest first). */
-export type CatalogSort = "recommended" | "price-low" | "price-high" | "distance";
+/** "nearby-first" (mobile Venues, 2026-11-25): within the radius nearest first, then every other match, recommended order. */
+export type CatalogSort = "recommended" | "price-low" | "price-high" | "distance" | "nearby-first";
 
 /** A listing in search results. Never carries contact or owner details: enquiries go through the platform. */
 export interface CatalogCard {

@@ -169,8 +169,9 @@ export function vendorSearchQuery(input: VendorSearchInput): CatalogQuery {
     ...(range?.min !== undefined ? { minPrice: range.min } : {}),
     ...(range?.max !== undefined ? { maxPrice: range.max } : {}),
     ...nearQuery(input.near),
-    // Near the customer, "recommended" becomes nearest first; a price sort still applies.
-    sort: input.near && input.sort === "recommended" ? "distance" : input.sort,
+    // Near the customer, "recommended" becomes "nearby-first" (mobile, 2026-11-25): vendors within the radius nearest
+    // first, then all the others; a price sort still applies (within the radius, as the web).
+    sort: input.near && input.sort === "recommended" ? "nearby-first" : input.sort,
   };
 }
 
@@ -206,14 +207,26 @@ export function countActiveVenueFilters(f: VenueFilters): number {
   return (f.priceMax !== null ? 1 : 0) + (f.minCapacity > 0 ? 1 : 0);
 }
 
-export function venueSearchQuery(input: { q: string; location: string; filters: VenueFilters; sort: CatalogQuery["sort"] }): CatalogQuery {
+/**
+ * The Venues search. Near the customer (mobile, 2026-11-25), "recommended" becomes "nearby-first": venues within the
+ * radius nearest first, then all the others in the recommended order. A price sort still applies, without the point.
+ */
+export function venueSearchQuery(input: {
+  q: string;
+  location: string;
+  filters: VenueFilters;
+  sort: CatalogQuery["sort"];
+  near?: VendorSearchInput["near"];
+}): CatalogQuery {
+  const nearbyFirst = !!input.near && (input.sort ?? "recommended") === "recommended";
   return {
     category: "VENUE",
     ...(input.location !== ALL_KERALA ? { city: input.location } : {}),
     ...(input.q.trim() ? { q: input.q.trim() } : {}),
     ...(input.filters.priceMax !== null ? { maxPrice: input.filters.priceMax } : {}),
     ...(input.filters.minCapacity > 0 ? { capacity: input.filters.minCapacity } : {}),
-    sort: input.sort,
+    ...(nearbyFirst ? nearQuery(input.near ?? null) : {}),
+    sort: nearbyFirst ? "nearby-first" : input.sort,
   };
 }
 
