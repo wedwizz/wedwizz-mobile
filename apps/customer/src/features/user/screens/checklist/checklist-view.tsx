@@ -105,8 +105,9 @@ function Ready({ c, onAdd }: { c: ChecklistContent; onAdd: () => void }) {
                   {group.count}
                 </AppText>
               </View>
-              {group.tasks.map((task, i) => (
-                <View key={task.key}>
+              {/* `key` goes on the row's wrapper only: React warns when a spread object carries it. */}
+              {group.tasks.map(({ key, ...task }, i) => (
+                <View key={key}>
                   {i > 0 && <Divider />}
                   <TaskRow {...task} />
                 </View>

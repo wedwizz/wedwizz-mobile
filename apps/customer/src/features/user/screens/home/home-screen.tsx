@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useWindowDimensions } from "react-native";
-import { useRouter, type Href } from "expo-router";
+import { useFocusEffect, useRouter, type Href } from "expo-router";
 import { CalendarCheck, Heart, Lightbulb, Mail } from "lucide-react-native";
 import { OptionSheet, space } from "@wedwizz/ui";
 import { CitySheet } from "@/features/user/components/city-sheet";
 import { FavouriteButton } from "@/features/user/components/favourite-button";
 import { NearMeButton } from "@/features/user/components/near-me";
 import { HOME_CATEGORIES } from "@/features/user/data/categories";
-import { CATEGORY_IMAGES } from "@/features/user/data/category-images";
+import { CATEGORY_IMAGES, PLANNER_IMAGES } from "@/features/user/data/category-images";
 import { HOME_HERO_SLIDES } from "@/features/user/data/home-hero";
 import { SERVICE_PHOTOS } from "@/features/user/data/service-photos";
 import { useCatalogList, useCatalogLists } from "@/features/user/hooks/use-catalog";
@@ -16,7 +16,7 @@ import { useEnquiries } from "@/features/user/hooks/use-enquiries";
 import { useFavourites } from "@/features/user/hooks/use-favourites";
 import { useUserSession } from "@/features/user/hooks/use-user-session";
 import { guestTabTarget } from "@/features/user/lib/auth-gate";
-import { homeVenueCardSize, railCardSizes, serviceCardWidth } from "@/features/user/lib/card-sizes";
+import { railCardSizes, serviceCardWidth } from "@/features/user/lib/card-sizes";
 import { toCardView } from "@/features/user/lib/catalog-view";
 import { locationLabel } from "@/features/user/lib/location";
 import { useUserStore } from "@/features/user/store/user-store";
@@ -34,6 +34,9 @@ const CATEGORIES: HomeCategoryTile[] = HOME_CATEGORIES.map((c) => ({
   iconColor: "brandDark",
 }));
 
+/** How long each banner photo shows before the next one. */
+const HERO_AUTOPLAY_MS = 5000;
+
 /** Web home-page.tsx (+ the header's city picker, the "Near me" sheet and the planner shortcuts). */
 export function HomeScreen() {
   const router = useRouter();
@@ -46,6 +49,15 @@ export function HomeScreen() {
   const favourites = useFavourites();
   const enquiries = useEnquiries();
   const [slide, setSlide] = useState(0);
+  // The banner moves on every few seconds and starts again after the last photo. A tap on an arrow or dot restarts
+  // the wait; it stops while another screen is open.
+  useFocusEffect(
+    useCallback(() => {
+      if (HOME_HERO_SLIDES.length < 2) return;
+      const timer = setTimeout(() => setSlide((slide + 1) % HOME_HERO_SLIDES.length), HERO_AUTOPLAY_MS);
+      return () => clearTimeout(timer);
+    }, [slide]),
+  );
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [sheet, setSheet] = useState<"city" | "category" | null>(null);
@@ -80,12 +92,15 @@ export function HomeScreen() {
     };
   });
 
-  const planner: PlannerTile[] = [
-    { key: "/user/checklist", label: "Checklist", icon: CalendarCheck, detail: `${counts.tasks} items\n${counts.done} completed` },
-    { key: "/user/favourites", label: "Shortlisted Vendors", icon: Heart, detail: `${counts.saved} saved` },
-    { key: "/user/invitations", label: "Digital Invites", icon: Mail, detail: "Create now" },
-    { key: "/user/inspiration", label: "Inspiration Board", icon: Lightbulb, detail: "Save ideas" },
-  ];
+  const planner: PlannerTile[] = (
+    [
+      // Order and lines from the web; colours and pictures from the planner reference (2026-11-26).
+      { key: "/user/checklist", label: "Checklist", icon: CalendarCheck, detail: `${counts.tasks} items • ${counts.done} completed`, tone: "pink" },
+      { key: "/user/favourites", label: "Shortlisted Vendors", icon: Heart, detail: `${counts.saved} saved`, tone: "peach" },
+      { key: "/user/invitations", label: "Digital Invites", icon: Mail, detail: "Create now", tone: "lavender" },
+      { key: "/user/inspiration", label: "Inspiration Board", icon: Lightbulb, detail: "Save ideas", tone: "teal" },
+    ] as const
+  ).map((t) => ({ ...t, image: PLANNER_IMAGES[t.key] ?? null }));
   // The Checklist tab needs an account: a guest goes to login, coming back to it (as the tab bar does).
   const openChecklist = () => {
     const guestTarget = guestTabTarget("checklist", status);
@@ -143,7 +158,8 @@ export function HomeScreen() {
       onViewAllVendors={() => go("/user/vendors")}
       onOpenListing={(card) => router.push(card.to as Href)}
       renderFavourite={(card) => <FavouriteButton id={card.slug} label={card.name} />}
-      cardSizes={{ venue: homeVenueCardSize(width, space.screen), vendor: railCardSizes(width, space.screen).vendor }}
+      // Featured Venues use the Popular Vendors card size, so both rails match.
+      cardSizes={{ venue: railCardSizes(width, space.screen).vendor, vendor: railCardSizes(width, space.screen).vendor }}
       planner={planner}
       onPressPlanner={(key) => (key === "/user/checklist" ? openChecklist() : router.push(key as Href))}
       onPlannerViewAll={openChecklist}

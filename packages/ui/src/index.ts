@@ -35,7 +35,7 @@ export { Price } from "./price";
 export { ListingCard } from "./listing-card";
 export type { ListingCardProps } from "./listing-card";
 export { SectionHeader } from "./section-header";
-export { CategoryTile, ToolTile } from "./tiles";
+export { CategoryTile, PlannerCard, ToolTile, type PlannerTone } from "./tiles";
 export { ResultPanel, InlineLink } from "./result-panel";
 export { Rail, RailSkeleton } from "./rail";
 export { SearchField, SelectPill } from "./search-field";

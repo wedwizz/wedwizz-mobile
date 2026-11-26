@@ -31,17 +31,6 @@ export function venueListImageHeight(screenWidth: number, sidePadding: number): 
   return Math.round(Math.min(screenWidth - sidePadding * 2, 420) * VENUE_PHOTO_RATIO);
 }
 
-/** Gap between cards in a rail (Rail's row gap, space.md). */
-const RAIL_GAP = 12;
-/** Home reference 2026-11-24: venue photos are wide and short on the half-width cards. */
-const HOME_VENUE_PHOTO_RATIO = 0.42;
-
-/** Home's Featured Venues (reference 2026-11-24): two cards side by side, the next one starts off screen. */
-export function homeVenueCardSize(screenWidth: number, sidePadding: number): CardSize {
-  const width = Math.min(Math.floor((screenWidth - sidePadding * 2 - RAIL_GAP) / 2), 240);
-  return { width, imageHeight: Math.round(width * HOME_VENUE_PHOTO_RATIO) };
-}
-
 /** Home's "Popular Services" cards: about three across a phone, wide enough for a lakh price on one line. */
 export function serviceCardWidth(screenWidth: number): number {
   return Math.min(Math.max(Math.round(screenWidth * 0.32), 110), 160);
