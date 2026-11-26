@@ -15,11 +15,12 @@ import {
   Screen,
   SectionHeader,
   ServiceCard,
-  ToolTile,
+  PlannerCard,
   colors,
   space,
   type ColorToken,
   type HeroSlide,
+  type PlannerTone,
 } from "@wedwizz/ui";
 import { VendorCard, VenueCard } from "@/features/user/components/listing-cards";
 import type { ListingCardView } from "@/features/user/lib/catalog-view";
@@ -47,7 +48,11 @@ export interface PlannerTile {
   key: string;
   label: string;
   icon: LucideIcon;
+  /** The pill's line ("3 saved"). */
   detail: string;
+  tone: PlannerTone;
+  /** The 3D picture (bundled); null shows the icon. */
+  image: number | null;
 }
 
 export interface ServiceTile {
@@ -99,7 +104,7 @@ export interface HomeViewProps {
   onOpenListing: (card: ListingCardView) => void;
   /** The wired heart for a card (favourites + login gate). */
   renderFavourite: (card: ListingCardView) => ReactNode;
-  /** Card sizes (lib/card-sizes.ts): venues two across, vendors as the vendor rails. */
+  /** Card sizes (lib/card-sizes.ts): Featured Venues and Popular Vendors use the same vendor rail size. */
   cardSizes: { venue: CardSize; vendor: CardSize };
   // Wedding planner
   planner: PlannerTile[];
@@ -207,9 +212,14 @@ export function HomeView(props: HomeViewProps) {
       {/* Wedding planner */}
       <View style={[styles.section, styles.padded]}>
         <SectionHeader title="Your Wedding Planner" subtitle="Stay organized and enjoy the journey!" onAction={props.onPlannerViewAll} />
+        {/* Two cards per row (planner reference 2026-11-26). */}
         <View style={styles.tools}>
-          {props.planner.map((t) => (
-            <ToolTile key={t.key} label={t.label} icon={t.icon} detail={t.detail} onPress={() => props.onPressPlanner(t.key)} />
+          {[props.planner.slice(0, 2), props.planner.slice(2, 4)].map((row, i) => (
+            <View key={i} style={styles.toolRow}>
+              {row.map((t) => (
+                <PlannerCard key={t.key} label={t.label} image={t.image} icon={t.icon} detail={t.detail} tone={t.tone} onPress={() => props.onPressPlanner(t.key)} />
+              ))}
+            </View>
           ))}
         </View>
       </View>
@@ -267,6 +277,7 @@ const styles = StyleSheet.create({
   categories: { marginTop: space.sm },
   banner: { marginTop: space.lg },
   section: { marginTop: space.xxl },
-  tools: { flexDirection: "row", gap: space.sm },
+  tools: { gap: space.md, marginTop: space.xs },
+  toolRow: { flexDirection: "row", gap: space.md },
   disclaimer: { marginTop: space.xxxl },
 });

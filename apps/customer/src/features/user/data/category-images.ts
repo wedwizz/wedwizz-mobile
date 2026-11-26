@@ -13,3 +13,11 @@ export const CATEGORY_IMAGES: Partial<Record<string, number>> = {
   invites: require("@/assets/images/invites.png") as number,
   more: require("@/assets/images/more.png") as number,
 };
+
+/** Home's "Your Wedding Planner" pictures (3D, transparent; supplied by the user 2026-11-26), by the tool's route. */
+export const PLANNER_IMAGES: Partial<Record<string, number>> = {
+  "/user/checklist": require("@/assets/images/planner-checklist.png") as number,
+  "/user/favourites": require("@/assets/images/planner-shortlisted.png") as number,
+  "/user/invitations": require("@/assets/images/planner-invites.png") as number,
+  "/user/inspiration": require("@/assets/images/planner-inspiration.png") as number,
+};

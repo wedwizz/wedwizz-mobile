@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { homeVenueCardSize, railCardSizes, serviceCardWidth, vendorListImageHeight, venueListImageHeight } from "./card-sizes";
+import { railCardSizes, serviceCardWidth, vendorListImageHeight, venueListImageHeight } from "./card-sizes";
 
 describe("railCardSizes", () => {
   it("matches the reference proportions on a phone", () => {
@@ -26,17 +26,6 @@ describe("venueListImageHeight", () => {
   it("keeps the venue photo proportion across the screen, like Home's venue rail", () => {
     expect(venueListImageHeight(360, 20)).toBe(railCardSizes(360, 20).venue.imageHeight);
     expect(venueListImageHeight(1000, 20)).toBe(218);
-  });
-});
-
-describe("homeVenueCardSize", () => {
-  it("fits two cards across a phone", () => {
-    expect(homeVenueCardSize(360, 20)).toEqual({ width: 154, imageHeight: 65 });
-    expect(homeVenueCardSize(392, 20)).toEqual({ width: 170, imageHeight: 71 });
-  });
-
-  it("caps the cards on a tablet", () => {
-    expect(homeVenueCardSize(1000, 20).width).toBe(240);
   });
 });
 
