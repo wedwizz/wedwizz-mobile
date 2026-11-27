@@ -1,8 +1,6 @@
 import { useState } from "react";
-import { Alert } from "react-native";
 import { useRouter, type Href } from "expo-router";
-import { Bell, CalendarCheck, FileText, Heart, LifeBuoy, ListChecks, MessageSquare, Palette, ShieldCheck } from "lucide-react-native";
-import { toApiError } from "@wedwizz/core/api/api-error";
+import { Bell, CalendarCheck, FileText, Heart, LifeBuoy, ListChecks, MessageSquare, Palette, Settings, ShieldCheck } from "lucide-react-native";
 import { EditProfileSheet } from "@/features/user/components/edit-profile-sheet";
 import { useMyBookings } from "@/features/user/hooks/use-bookings";
 import { useCustomerProfile } from "@/features/user/hooks/use-customer-profile";
@@ -28,11 +26,10 @@ function Profile() {
   const favourites = useFavourites();
   const enquiries = useEnquiries();
   const bookings = useMyBookings();
-  const { account, logout } = useUserSession();
+  const { account } = useUserSession();
   // RequireUser only renders this page once the profile is loaded and saved.
   const profile = useCustomerProfile().data?.profile;
   const [editOpen, setEditOpen] = useState(false);
-  const [loggingOut, setLoggingOut] = useState(false);
   if (!profile) return null;
 
   const push = (path: string) => () => router.push(path as Href);
@@ -46,24 +43,10 @@ function Profile() {
     { label: "Help & support", icon: LifeBuoy, onPress: section("help") },
     { label: "Privacy policy", icon: ShieldCheck, onPress: section("privacy") },
     { label: "Terms & conditions", icon: FileText, onPress: section("terms") },
+    // Log out and Delete account live there, out of the way of the everyday rows (as the web).
+    { label: "Account settings", icon: Settings, onPress: push("/user/account-settings") },
     ...(__DEV__ ? [{ label: "Design system preview", icon: Palette, detail: "Development builds only", onPress: push("/dev/ui-preview") }] : []),
   ];
-
-  // Web: a "Log out?" confirmation, then sign out. The Profile tab's guard then shows welcome.
-  const confirmLogout = () =>
-    Alert.alert("Log out?", "You'll be signed out on this device and return to the welcome screen.", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Log out",
-        style: "destructive",
-        onPress: () => {
-          setLoggingOut(true);
-          logout()
-            .catch((err: unknown) => Alert.alert("Couldn't log out", toApiError(err).message))
-            .finally(() => setLoggingOut(false));
-        },
-      },
-    ]);
 
   return (
     <ProfileView
@@ -78,8 +61,6 @@ function Profile() {
         { value: countLabel(bookings.data?.length), label: "Bookings", color: "brand", onPress: push("/user/bookings") },
       ]}
       menu={menu}
-      onLogout={confirmLogout}
-      loggingOut={loggingOut}
       sheet={<EditProfileSheet profile={profile} visible={editOpen} onClose={() => setEditOpen(false)} />}
     />
   );
