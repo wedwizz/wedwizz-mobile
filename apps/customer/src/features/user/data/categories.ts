@@ -1,3 +1,4 @@
+import { isHiddenSamplePath } from "@/features/user/lib/launch";
 import {
   Brush,
   CalendarHeart,
@@ -22,7 +23,7 @@ export interface HomeCategory {
   to: string;
 }
 
-export const HOME_CATEGORIES: HomeCategory[] = [
+const ALL_HOME_CATEGORIES: HomeCategory[] = [
   { key: "venues", label: "Venues", icon: Landmark, tintClass: "bg-tint-pink", iconClass: "text-brand-dark", to: "/user/venues" },
   { key: "photographers", label: "Photographers", icon: Camera, tintClass: "bg-tint-peach", iconClass: "text-orange-800", to: "/user/vendors?category=photographers" },
   { key: "makeup", label: "Makeup Artists", icon: Brush, tintClass: "bg-tint-pink", iconClass: "text-rose-700", to: "/user/vendors?category=makeup" },
@@ -33,6 +34,9 @@ export const HOME_CATEGORIES: HomeCategory[] = [
   { key: "invites", label: "Invites & Gifts", icon: Gift, tintClass: "bg-tint-pink", iconClass: "text-rose-600", to: "/user/market?category=invitations" },
   { key: "more", label: "More", icon: Ellipsis, tintClass: "bg-tint-sand", iconClass: "text-neutral-700", to: "/user/vendors" },
 ];
+
+/** Without the tiles that lead to a hidden sample feature ("Invites & Gifts" opens the market). */
+export const HOME_CATEGORIES: HomeCategory[] = ALL_HOME_CATEGORIES.filter((c) => !isHiddenSamplePath(c.to));
 
 export const MARKET_CATEGORIES: { key: MarketCategoryKey | "all" | "deals"; label: string }[] = [
   { key: "all", label: "All" },

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRouter, type Href } from "expo-router";
-import { Bell, CalendarCheck, FileText, Heart, LifeBuoy, ListChecks, MessageSquare, Palette, Settings, ShieldCheck } from "lucide-react-native";
+import { CalendarCheck, FileText, Heart, LifeBuoy, ListChecks, MessageSquare, Palette, Settings, ShieldCheck } from "lucide-react-native";
 import { EditProfileSheet } from "@/features/user/components/edit-profile-sheet";
 import { useMyBookings } from "@/features/user/hooks/use-bookings";
 import { useCustomerProfile } from "@/features/user/hooks/use-customer-profile";
@@ -39,7 +39,6 @@ function Profile() {
     { label: "My enquiries", icon: MessageSquare, onPress: push("/user/enquiries") },
     { label: "My bookings", icon: CalendarCheck, onPress: push("/user/bookings") },
     { label: "Wedding checklist", icon: ListChecks, onPress: () => router.navigate("/user/checklist") },
-    { label: "Notification preferences", icon: Bell, onPress: section("notifications") },
     { label: "Help & support", icon: LifeBuoy, onPress: section("help") },
     { label: "Privacy policy", icon: ShieldCheck, onPress: section("privacy") },
     { label: "Terms & conditions", icon: FileText, onPress: section("terms") },
