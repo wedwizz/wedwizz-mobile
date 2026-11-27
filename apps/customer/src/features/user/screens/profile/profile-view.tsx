@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
-import { LogOut, Pencil, type LucideIcon } from "lucide-react-native";
+import { Pencil, type LucideIcon } from "lucide-react-native";
 import { AppText, Avatar, Button, Card, CountRow, Divider, InfoGrid, ListRow, Screen, colors, space, type CountItem } from "@wedwizz/ui";
 
 export interface ProfileMenuRow {
@@ -18,13 +18,11 @@ export interface ProfileViewProps {
   details: { label: string; value: string }[];
   counts: CountItem[];
   menu: ProfileMenuRow[];
-  onLogout: () => void;
-  loggingOut: boolean;
   /** The edit sheet. */
   sheet: ReactNode;
 }
 
-/** Web profile-page.tsx: the profile card with Edit, Saved / Enquiries / Bookings counts, the menu, Log out. */
+/** Web profile-page.tsx: the profile card with Edit, Saved / Enquiries / Bookings counts, the menu (Log out and Delete account are in Account settings). */
 export function ProfileView(p: ProfileViewProps) {
   return (
     <Screen>
@@ -57,8 +55,6 @@ export function ProfileView(p: ProfileViewProps) {
                 <ListRow icon={row.icon} label={row.label} detail={row.detail} onPress={row.onPress} />
               </Fragment>
             ))}
-            <Divider />
-            <ListRow icon={LogOut} label={p.loggingOut ? "Logging out…" : "Log out"} tone="danger" chevron={false} onPress={p.loggingOut ? undefined : p.onLogout} />
           </View>
         </Card>
       </View>

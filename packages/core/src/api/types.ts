@@ -237,6 +237,11 @@ export interface CustomerProfileData {
   profile: CustomerProfile | null;
 }
 
+/** `DELETE /me/account`: the account is gone; upcoming bookings were cancelled with it. */
+export interface DeleteAccountData {
+  cancelledBookings: number;
+}
+
 /** `PUT /me/profile`: the whole form; optional fields left null are cleared. */
 export interface SaveCustomerProfilePayload {
   name: string;
