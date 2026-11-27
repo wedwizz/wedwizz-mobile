@@ -44,10 +44,3 @@ export const inspirationImage = (seed: string, shape: InspirationShape, large = 
   if (shape === "wide") return photo(seed, 600 * scale, 450 * scale);
   return photo(seed, 500 * scale, 500 * scale);
 };
-
-
-export const SAMPLE_NOTIFICATIONS = [
-  { id: "n1", title: "Lumen Wedding Stories replied to your enquiry", time: "2h ago" },
-  { id: "n2", title: "3 new venues added in Kochi", time: "Yesterday" },
-  { id: "n3", title: "Checklist reminder: shortlist venues", time: "2 days ago" },
-] as const;

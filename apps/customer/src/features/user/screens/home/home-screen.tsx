@@ -9,6 +9,7 @@ import { NearMeButton } from "@/features/user/components/near-me";
 import { HOME_CATEGORIES } from "@/features/user/data/categories";
 import { CATEGORY_IMAGES, PLANNER_IMAGES } from "@/features/user/data/category-images";
 import { HOME_HERO_SLIDES } from "@/features/user/data/home-hero";
+import { isHiddenSamplePath } from "@/features/user/lib/launch";
 import { SERVICE_PHOTOS } from "@/features/user/data/service-photos";
 import { useCatalogList, useCatalogLists } from "@/features/user/hooks/use-catalog";
 import { useChecklist } from "@/features/user/hooks/use-checklist";
@@ -100,7 +101,10 @@ export function HomeScreen() {
       { key: "/user/invitations", label: "Digital Invites", icon: Mail, detail: "Create now", tone: "lavender" },
       { key: "/user/inspiration", label: "Inspiration Board", icon: Lightbulb, detail: "Save ideas", tone: "teal" },
     ] as const
-  ).map((t) => ({ ...t, image: PLANNER_IMAGES[t.key] ?? null }));
+  )
+    // Digital Invites and Inspiration Board stay out while they are hidden sample features (lib/launch.ts).
+    .filter((t) => !isHiddenSamplePath(t.key))
+    .map((t) => ({ ...t, image: PLANNER_IMAGES[t.key] ?? null }));
   // The Checklist tab needs an account: a guest goes to login, coming back to it (as the tab bar does).
   const openChecklist = () => {
     const guestTarget = guestTabTarget("checklist", status);

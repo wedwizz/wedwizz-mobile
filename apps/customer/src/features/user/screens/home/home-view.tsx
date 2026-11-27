@@ -214,7 +214,9 @@ export function HomeView(props: HomeViewProps) {
         <SectionHeader title="Your Wedding Planner" subtitle="Stay organized and enjoy the journey!" onAction={props.onPlannerViewAll} />
         {/* Two cards per row (planner reference 2026-11-26). */}
         <View style={styles.tools}>
-          {[props.planner.slice(0, 2), props.planner.slice(2, 4)].map((row, i) => (
+          {[props.planner.slice(0, 2), props.planner.slice(2, 4)]
+            .filter((row) => row.length > 0)
+            .map((row, i) => (
             <View key={i} style={styles.toolRow}>
               {row.map((t) => (
                 <PlannerCard key={t.key} label={t.label} image={t.image} icon={t.icon} detail={t.detail} tone={t.tone} onPress={() => props.onPressPlanner(t.key)} />
@@ -224,9 +226,7 @@ export function HomeView(props: HomeViewProps) {
         </View>
       </View>
 
-      <AppText variant="caption" color="muted" align="center" style={[styles.padded, styles.disclaimer]}>
-        Sample listings for demonstration only. Prices and availability are not real.
-      </AppText>
+      <View style={styles.end} />
       {props.sheets}
     </Screen>
   );
@@ -279,5 +279,6 @@ const styles = StyleSheet.create({
   section: { marginTop: space.xxl },
   tools: { gap: space.md, marginTop: space.xs },
   toolRow: { flexDirection: "row", gap: space.md },
-  disclaimer: { marginTop: space.xxxl },
+  // Room under the last section (it used to be the sample-listings line).
+  end: { height: space.xxxl },
 });

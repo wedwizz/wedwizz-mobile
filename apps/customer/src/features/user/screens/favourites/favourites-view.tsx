@@ -6,6 +6,8 @@ import type { ShortlistTab } from "./shortlist";
 
 export interface FavouritesViewProps {
   onBack: () => void;
+  /** "Your saved venues and vendors." (and market items, when the market is shown). */
+  subtitle: string;
   tabs: { value: ShortlistTab; label: string }[];
   tab: ShortlistTab;
   onChangeTab: (tab: ShortlistTab) => void;
@@ -35,7 +37,7 @@ export function FavouritesView(props: FavouritesViewProps) {
           Shortlisted
         </AppText>
         <AppText variant="meta" color="muted">
-          Your saved venues, vendors and market items.
+          {props.subtitle}
         </AppText>
       </View>
       <ChipGroup accessibilityLabel="Saved item type" options={props.tabs} value={props.tab} onChange={props.onChangeTab} />

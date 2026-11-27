@@ -5,7 +5,8 @@ import { LOGO } from "./auth-assets";
 import { LegalLinks } from "./legal-links";
 
 export interface WelcomeViewProps {
-  heroImage: string;
+  /** Bundled photo (require). */
+  heroImage: number;
   onGetStarted: () => void;
   onHaveAccount: () => void;
   onTerms: () => void;
@@ -18,7 +19,7 @@ export interface WelcomeViewProps {
 export function WelcomeView({ heroImage, onGetStarted, onHaveAccount, onTerms, onPrivacy, onVendorLogin }: WelcomeViewProps) {
   return (
     <View style={styles.screen}>
-      <SafeImage source={heroImage} alt="A couple at their wedding ceremony" style={StyleSheet.absoluteFill} />
+      <SafeImage source={heroImage} alt="A flower-decked wedding mandap at sunset" style={StyleSheet.absoluteFill} />
       <View style={[StyleSheet.absoluteFill, styles.fade]} />
       <SafeAreaView style={styles.content} edges={["top", "bottom"]}>
         <View style={styles.logo}>

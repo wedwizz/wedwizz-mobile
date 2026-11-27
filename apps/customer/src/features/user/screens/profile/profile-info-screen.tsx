@@ -1,4 +1,6 @@
+import { Linking } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { SUPPORT_EMAIL } from "@/config/web-links";
 import { paramString, PUBLIC_PROFILE_SECTIONS } from "@/features/user/lib/auth-gate";
 import { RequireUser } from "@/features/user/routes/guards";
 import { ProfileInfoView } from "./profile-info-view";
@@ -16,6 +18,8 @@ export function ProfileInfoScreen() {
       section={section}
       backLabel={router.canGoBack() ? "Back" : "Profile"}
       onBack={() => (router.canGoBack() ? router.back() : router.replace("/user/profile"))}
+      supportEmail={SUPPORT_EMAIL}
+      onEmailSupport={() => void Linking.openURL(`mailto:${SUPPORT_EMAIL ?? ""}`)}
     />
   );
   return isPublic ? view : <RequireUser>{view}</RequireUser>;

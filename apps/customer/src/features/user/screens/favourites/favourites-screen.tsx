@@ -8,6 +8,7 @@ import { VendorCard, VenueCard } from "@/features/user/components/listing-cards"
 import { MarketCard } from "@/features/user/components/market-card";
 import { useFavourites, useToggleFavourite } from "@/features/user/hooks/use-favourites";
 import { useGoBack } from "@/features/user/hooks/use-go-back";
+import { SAMPLE_FEATURES } from "@/features/user/lib/launch";
 import { vendorListImageHeight, venueListImageHeight } from "@/features/user/lib/card-sizes";
 import { RequireUser } from "@/features/user/routes/guards";
 import { useUserStore } from "@/features/user/store/user-store";
@@ -57,10 +58,11 @@ function Favourites() {
   return (
     <FavouritesView
       onBack={goBack}
+      subtitle={SAMPLE_FEATURES.market ? "Your saved venues, vendors and market items." : "Your saved venues and vendors."}
       tabs={[
         { value: "venues", label: `Venues (${lists.venues.length})` },
         { value: "vendors", label: `Vendors (${lists.vendors.length})` },
-        { value: "market", label: `Market (${lists.market.length})` },
+        ...(SAMPLE_FEATURES.market ? [{ value: "market" as const, label: `Market (${lists.market.length})` }] : []),
       ]}
       tab={tab}
       onChangeTab={setTab}
